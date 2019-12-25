@@ -1,0 +1,11 @@
+http://ip.taobao.com/service/getIpInfo.php?ip=123.22.5.1  判断地理位置的接口
+
+http://ip.taobao.com/instructions.html
+
+
+
+
+更多参考：
+https://www.jb51.net/article/161436.htm
+https://www.jb51.net/article/68829.htm
+https://www.jb51.net/article/57997.htm
