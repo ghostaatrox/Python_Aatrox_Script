@@ -2,7 +2,7 @@
 #http://tool.chinaz.com/subdomain?domain=
 
 #更新日志
-# version=1.0.1 已解决去重问题，下一步解决链接超时问题。
+# version=1.0.3 已解决去重问题，下一步解决链接超时问题。
 import re,requests
 headers = {
         'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.87 Safari/537.36'
