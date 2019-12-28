@@ -3,7 +3,11 @@
 #http://seo.chinaz.com/?q=   #归属地查询、IP解析
 
 #更新日志
+<<<<<<< HEAD
 # version=1.0.4 已重构代码，完成快速接口接入、使用。
+=======
+# version=1.0.3 已解决去重问题，下一步解决链接超时问题。
+>>>>>>> 1e9b5a720cdbd86073f181da6dbdd27b29f63911
 import re,requests
 headers = {
         'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.87 Safari/537.36'
@@ -58,6 +62,7 @@ def get_ip_address(url):
 
 if __name__ == '__main__':
     url=input('please input one url,then press Enter of goto next part:\n')
+<<<<<<< HEAD
     print('Design by GhostAatrox,version---1.0.4')
     print('1 Θ使用默认配置(全部功能)Θ')
     print('2 ΘIP解析、归属地查询功能(单ip)Θ')
@@ -83,3 +88,10 @@ if __name__ == '__main__':
         if keyword=='4':
             print('Θsee u laterΘ')
             exit()
+=======
+    goto_url_1(url)
+    goto_url_2(url)
+    check_double()
+    for end in end_list:
+        get_ip_address(end)
+>>>>>>> 1e9b5a720cdbd86073f181da6dbdd27b29f63911
