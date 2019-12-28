@@ -9,3 +9,7 @@ http://ip.taobao.com/instructions.html
 https://www.jb51.net/article/161436.htm
 https://www.jb51.net/article/68829.htm
 https://www.jb51.net/article/57997.htm
+
+
+编写脚本时遇到问题及处理：
+重构代码，以达到加入一个接口和正则.  #已完成，采用方法为接口字典形式+变量判断

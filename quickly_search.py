@@ -1,8 +1,9 @@
-#http://ce.baidu.com/index/getRelatedSites?site_address=
-#http://tool.chinaz.com/subdomain?domain=
+#http://ce.baidu.com/index/getRelatedSites?site_address=  子域名查找接口1
+#http://tool.chinaz.com/subdomain?domain=   子域名查找接口2
+#http://seo.chinaz.com/?q=   #归属地查询、IP解析
 
 #更新日志
-# version=1.0.1 已解决去重问题，下一步解决链接超时问题。
+# version=1.0.4 已重构代码，完成快速接口接入、使用。
 import re,requests
 headers = {
         'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.87 Safari/537.36'
@@ -12,31 +13,30 @@ lists1=[]
 lists2=[]
 end_list=[]
 double_href=[]
-def goto_url_1(url):
-    url_1 = 'http://ce.baidu.com/index/getRelatedSites?site_address='
-    wb_data = requests.get(url_1+url, headers=headers,verify=False)
-    wb_data.encoding = wb_data.apparent_encoding
+def goto_url(url):
     requests.packages.urllib3.disable_warnings()
-    links = re.findall('{"domain":"(.*?)","score":.*?}', wb_data.text, re.S)
-    for link in links:
-        lists1.append(link)
-def goto_url_2(url):
-    url_2 = 'http://tool.chinaz.com/subdomain?domain=' + url
-    wb_data = requests.get(url_2, headers=headers, verify=False)
-    wb_data.encoding = wb_data.apparent_encoding
-    requests.packages.urllib3.disable_warnings()
-    links = re.findall('<a href="javascript:" onclick="window.open.*?;" target="_blank">(.*?)</a>', wb_data.text, re.S)
-    for link in links:
-        lists2.append(link)
+    url_list = ['http://ce.baidu.com/index/getRelatedSites?site_address=' + url,
+                'http://tool.chinaz.com/subdomain?domain=' + url]
+    for i in range(0,2):
+        wb_data= requests.get(url_list[i], headers=headers,verify=False,timeout=3)
+        wb_data.encoding = wb_data.apparent_encoding
+        if i==0:
+            links_1 = re.findall('{"domain":"(.*?)","score":.*?}', wb_data.text, re.S)
+            for link in links_1:
+                lists1.append(link)
+        if i==1:
+            links = re.findall('<a href="javascript:" onclick="window.open.*?;" target="_blank">(.*?)</a>', wb_data.text, re.S)
+            for link in links:
+                lists2.append(link)
+        else:
+            pass
 def check_double():  #解决去重链接函数,采用嵌套循环判断，处理完成。
     for list1 in lists1:
         for list2 in lists2:
             if list1==list2:
                 lists2.remove(list2) #进行去重处理
-        #print(list1)
         end_list.append(list1)
     for list2 in lists2:
-        #print(list2)
         end_list.append(list2)
     print('经过去重后得到'+str(len(lists1+lists2))+'个子域名')
     print('loading....')
@@ -55,10 +55,31 @@ def get_ip_address(url):
             print('error'+end)
     except:
         print('timeout~~~~'+url+'   next')
+
 if __name__ == '__main__':
     url=input('please input one url,then press Enter of goto next part:\n')
-    goto_url_1(url)
-    goto_url_2(url)
-    check_double()
-    for end in end_list:
-        get_ip_address(end)
+    print('Design by GhostAatrox,version---1.0.4')
+    print('1 Θ使用默认配置(全部功能)Θ')
+    print('2 ΘIP解析、归属地查询功能(单ip)Θ')
+    print('3 Θ子域名查找功能Θ')
+    print('4 Θ退出Θ')
+    if url != '':
+        keyword=input('please press what u want:\n')
+        if len(keyword)>1:
+            print('Θ暂不支持这种输入,请等待后续拓展Θ')
+        else:
+            try:
+                if int(keyword)>=5:
+                    print('Θ暂无此功能,请等待后续拓展Θ')
+            except:
+                print('Θerror:请输入数字Θ')
+        if keyword=='1':
+            goto_url(url)
+            check_double()
+            for end in end_list:
+                get_ip_address(end)
+        if keyword=='2':
+            get_ip_address(url)
+        if keyword=='4':
+            print('Θsee u laterΘ')
+            exit()
