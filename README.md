@@ -34,3 +34,10 @@ version=1.0.3 ->version=1.0.4
 导出xls，增加可视化
 子域名爆破功能
 端口查询功能
+
+
+计划完成：
+一个post形式的子域名查找
+
+其余的get接口：
+https://site.ip138.com/hnie.edu.cn/domain.htm

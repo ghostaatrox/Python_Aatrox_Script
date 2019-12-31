@@ -4,7 +4,7 @@
 
 #更新日志
 # version=1.0.4 已重构代码，完成快速接口接入、使用。
-import re,requests
+import re,requests,xlwt
 headers = {
         'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.87 Safari/537.36'
     }
@@ -13,6 +13,7 @@ lists1=[]
 lists2=[]
 end_list=[]
 double_href=[]
+xls_list=[]
 def goto_url(url):
     requests.packages.urllib3.disable_warnings()
     url_list = ['http://ce.baidu.com/index/getRelatedSites?site_address=' + url,
@@ -49,19 +50,30 @@ def get_ip_address(url):
         try:
             if len(ip_address[0])>10:
                 print(url+':   '+ip_address[0])
+                list_end=[url,ip_address[0]]
+                xls_list.append(list_end)
             else:
                 print('nothing found:'+end)
         except:
             print('error'+end)
     except:
         print('timeout~~~~'+url+'   next')
-
+def port_quickly_search(url):
+    url_search_ip='https://dns.aizhan.com/'+url+'/'
+    wb_data_ip=requests.get(url_search_ip,headers=headers,verify=False)
+    ip=re.findall('<strong class="red">(.*?)</strong>',wb_data_ip.text,re.S)
+    ip=ip[0]
+    url_search_port="https://www.shodan.io/host/"+str(ip)
+    wb_data_port=requests.get(url_search_port,headers=headers)
+    ports=re.findall('<a href="#.*?">(.*?)</a>',wb_data_port.text,re.S)
+    for port in ports:
+        print(port+'  open')
 if __name__ == '__main__':
     url=input('please input one url,then press Enter of goto next part:\n')
     print('Design by GhostAatrox,version---1.0.4')
     print('1 Θ使用默认配置(全部功能)Θ')
     print('2 ΘIP解析、归属地查询功能(单ip)Θ')
-    print('3 Θ子域名查找功能Θ')
+    print('3 Θ开放端口查询Θ')
     print('4 Θ退出Θ')
     if url != '':
         keyword=input('please press what u want:\n')
@@ -78,8 +90,24 @@ if __name__ == '__main__':
             check_double()
             for end in end_list:
                 get_ip_address(end)
+            header = ['rank', 'singer']
+            book = xlwt.Workbook(encoding='utf-8')
+            Sheet = book.add_sheet('GhostAatrox')
+            for h in range(len(header)):
+                Sheet.write(0, h, header[h])
+            i = 1
+            for list in xls_list:
+                j = 0
+                for data in list:
+                    Sheet.write(i, j, data)
+                    j += 1
+                i += 1
+        book.save('Superman.xls')
+        print('save ok')
         if keyword=='2':
             get_ip_address(url)
+        if keyword=='3':
+            port_quickly_search(url)
         if keyword=='4':
             print('Θsee u laterΘ')
             exit()
